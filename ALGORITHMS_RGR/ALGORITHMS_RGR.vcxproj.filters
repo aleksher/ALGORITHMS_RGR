@@ -36,6 +36,9 @@
     <ClCompile Include="view.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="game.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="view.h">
@@ -54,5 +57,10 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ALGORITHMS_RGR.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="game.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
