@@ -110,6 +110,12 @@ void View::paintEvent(QPaintEvent *)
 			p.drawText(position * 50 + QPoint(20, 33), monster_title);
 		}
 
+	// нарисуем препятствия
+	//p.setBrush(QBrush(QColor(40, 40, 40)));
+	for (int i = 0; i < 3; i++)
+	{
+		p.drawRect(game->stops[i].x() * 50, game->stops[i].y() * 50, 50, 50);
+	}
 	// TODO: пропадает буква при перемещении
 	if (this->game->getSelectedMonsterIndex() >= 0)
 		if (!(this->mousePosition.x() < 0 || this->mousePosition.y() < 0 || this->mousePosition.x() > 7 || this->mousePosition.y() > 7))

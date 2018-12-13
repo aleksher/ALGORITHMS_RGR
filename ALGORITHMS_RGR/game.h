@@ -30,10 +30,9 @@ public:
 	MonsterType getPlayMode() { return this->gameMode; }
 
 	QPoint& getBanditPosition() { return bandit; }
-	QPoint& getWolfPosition(int wolfIndex)
+	QPoint& getWolfPosition()
 	{
-		Q_ASSERT(wolfIndex < 4 && wolfIndex >= 0);
-		return wolfs[wolfIndex];
+		return policeman;
 	}
 
 	bool checkRange(int x, int y) { return (x >= 0 && y >= 0 && x <= 7 && y <= 7); }
@@ -44,7 +43,7 @@ public:
 		if (monsterIndex == 0)
 			return getBanditPosition();
 		else
-			return getWolfPosition(monsterIndex - 1);
+			return getWolfPosition();
 	}
 
 	MonsterType getMonsterType(int monsterIndex)
@@ -69,16 +68,19 @@ public:
 
 	bool isGameOver(MonsterType& winner);
 	bool isGameOver() { MonsterType winner; return isGameOver(winner); }
+	QPoint stops[3]; // препятствия
 
 private:
 	static const int NOT_INITIALIZED = 255;
 
+	static const int STOP = -1;
 	static const int EMPTY = 0;
 	static const int BANDIT = 1;
 	static const int POLICEMEN = 255;
 
-	QPoint wolfs[4];
+	QPoint policeman;
 	QPoint bandit;
+
 	MonsterType gameMode;
 
 	int map[8][8];

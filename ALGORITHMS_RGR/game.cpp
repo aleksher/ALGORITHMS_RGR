@@ -36,9 +36,8 @@ int Game::getMonsterIndexOnPosition(const QPoint &pos)
 	if (this->bandit == pos)
 		return 0;
 
-	for (int i = 0; i < 4; i++)
-		if (this->wolfs[i] == pos)
-			return i + 1;
+	if (policeman == pos)
+		return 1;
 
 	return -1;
 }
@@ -47,39 +46,25 @@ bool Game::canMoveToPosition(int monsterIndex, const QPoint &pos)
 {
 	Q_ASSERT(monsterIndex >= 0 || monsterIndex <= 2);
 
-	if (!checkRange(pos))
+	if (!checkRange(pos) && getPlayMode() != MT_BANDIT)
 		return false;
-
-	// нельзя ходить
-	//if ((pos.x() + pos.y()) % 2 != 0)
-	//	return false;
 
 	QPoint oldPosition = getMonsterPosition(monsterIndex);
 	QPoint diff = oldPosition - pos;
-	//if (monsterIndex == POLICEMEN)
-	//{
-	//	if (abs(diff.x()) > 1 || abs(diff.y()) > 1)
-	//		return false;
-	//}
-	//else if (monsterIndex == BANDIT)
-	//{
-	//	if (abs(diff.x()) == 1 && abs(diff.y()) == 0 || abs(diff.x()) == 0 && abs(diff.y()) == 1)
-	//		return false;
-	//}
 
 	// дальше одной клетки
 	if (abs(diff.x()) > 1 || abs(diff.y()) > 1)
 		return false;
 
-	// только диагональ
-	if (abs(diff.x()) == 1 && abs(diff.y()) == 1 && !monsterIndex)
+	// запрет бандиту ходить по диагонали
+	if (abs(diff.x()) == 1 && abs(diff.y()) == 1 && monsterIndex == 0)
 		return false;
 
 	if (oldPosition == pos)
 		return false;
 
-	for (int i = 0; i < getMonsterCount(); i++)
-		if (i != monsterIndex && getMonsterPosition(i) == pos)
+	for (int i = 0; i < 3; i++)
+		if (stops[i] == pos)
 			return false;
 
 	return true;
@@ -89,22 +74,20 @@ bool Game::isGameOver(MonsterType& winner)
 {
 	winner = MT_NO_ONE;
 
-	bool canMove = false;
-	for (int k = 0; k < 4; k++)
-		for (int i = 0; i < 2; i++)
-			if (canMoveToPosition(k + 1, this->wolfs[k] + this->possibleMoves[i]))
-				canMove = true;
+	auto policeman_pos = getWolfPosition();
+	auto bandit_pos = getBanditPosition();
 
-	if (!canMove || this->bandit.y() == 0)
-		winner = MT_BANDIT;
-
-	canMove = false;
-	for (int i = 0; i < 4; i++)
-		if (canMoveToPosition(0, this->bandit + this->possibleMoves[i]))
-			canMove = true;
-
-	if (!canMove)
+	if (policeman_pos == bandit_pos)
+	{
 		winner = MT_POLICEMEN;
+		return true;
+	}
+
+	if (!checkRange(bandit_pos))
+	{
+		winner = MT_BANDIT;
+		return true;
+	}
 
 	if (winner != MT_NO_ONE)
 	{
@@ -124,7 +107,7 @@ bool Game::moveSelectedMonsterToPosition(const QPoint &pos)
 		if (this->selectedMonster == 0)
 			this->bandit = pos;
 		else
-			this->wolfs[this->selectedMonster - 1] = pos;
+			this->policeman = pos;
 	else
 		return false;
 
@@ -147,11 +130,14 @@ void Game::prepareMap()
 		memset(this->map[i], 0, 8 * sizeof(int));
 
 	this->map[this->bandit.y()][this->bandit.x()] = BANDIT;
-	for (int i = 0; i < 4; i++)
-		this->map[this->wolfs[i].y()][this->wolfs[i].x()] = POLICEMEN;
+	this->map[this->policeman.y()][this->policeman.x()] = POLICEMEN;
+	for (int i = 0; i < 3; i++)
+	{
+		this->map[this->stops[i].y()][this->stops[i].x()] = STOP;
+	}
 }
 
-//����� � ������, �������� ��������.
+// 
 int Game::getHeuristicEvaluation()
 {
 	if (this->bandit.y() == 0)
@@ -189,9 +175,9 @@ void Game::temporaryMonsterMovement(int monsterIndex, int x, int y)
 	}
 	else
 	{
-		this->map[this->wolfs[monsterIndex - 1].y()][this->wolfs[monsterIndex - 1].x()] = EMPTY;
-		this->map[this->wolfs[monsterIndex - 1].y() + y][this->wolfs[monsterIndex - 1].x() + x] = POLICEMEN;
-		this->wolfs[monsterIndex - 1] += QPoint(x, y);
+		this->map[this->policeman.y()][this->policeman.x()] = EMPTY;
+		this->map[this->policeman.y() + y][policeman.x() + x] = POLICEMEN;
+		this->policeman += QPoint(x, y);
 	}
 }
 
@@ -206,6 +192,7 @@ bool Game::canMove(int x, int y)
 	return true;
 }
 
+///!!!!!
 int Game::runMinMax(MonsterType monster, int recursiveLevel, int alpha, int beta)
 {
 	if (recursiveLevel == 0)
@@ -231,7 +218,7 @@ int Game::runMinMax(MonsterType monster, int recursiveLevel, int alpha, int beta
 	for (int i = (isWolf ? 0 : 8); i < (isWolf ? 8 : 12); i++)
 	{
 		int curMonster = isWolf ? i / 2 + 1 : 0;
-		QPoint curMonsterPos = curMonster == 0 ? this->bandit : this->wolfs[curMonster - 1];
+		QPoint curMonsterPos = curMonster == 0 ? this->bandit : this->policeman;
 		QPoint curMove = this->possibleMoves[isWolf ? i % 2 : i % 4];
 
 		if (canMove(curMonsterPos + curMove))
@@ -274,7 +261,7 @@ int Game::runMinMax(MonsterType monster, int recursiveLevel, int alpha, int beta
 	if (recursiveLevel == 0 && bestMove != NOT_INITIALIZED)
 	{
 		if (monster == MT_POLICEMEN)
-			this->wolfs[bestMove / 2] += this->possibleMoves[bestMove % 2];
+			this->policeman += this->possibleMoves[bestMove % 2];
 		else
 			this->bandit += this->possibleMoves[bestMove % 4];
 	}
@@ -284,10 +271,16 @@ int Game::runMinMax(MonsterType monster, int recursiveLevel, int alpha, int beta
 
 void Game::initialize()
 {
-	this->wolfs[0] = QPoint(0, 0);
-	this->wolfs[1] = QPoint(2, 0);
-	this->wolfs[2] = QPoint(4, 0);
-	this->wolfs[3] = QPoint(6, 0);
+	int x = rand() % 6;
+	int y = rand() % 6;
+	/*this->policeman = QPoint(2, 1);
+	this->bandit = QPoint(4, 5);*/
+	while ((this->policeman = QPoint(rand() % 7, rand() % 7)) == (this->bandit = QPoint(2 + rand() % 5, 2 + rand() % 5)));
+	for (int i = 0; i < 3; i++)
+	{
+		QPoint stop;
+		while ((stop = QPoint(rand() % 7, rand() % 7)) == this->policeman || (stop = QPoint(rand() % 7, rand() % 7)) == this->bandit);
+		this->stops[i] = stop;
+	}
 
-	this->bandit = QPoint(3, 7);
 }
