@@ -5,16 +5,16 @@ Game::Game()
 	:active(false), selectedMonster(-1)
 {
 	//по диагонали
-	possibleMoves[0] = QPoint(-1, +1);  //влево вниз
-	possibleMoves[1] = QPoint(+1, +1);  //вправо вниз
-	possibleMoves[2] = QPoint(-1, -1);  //влево вверх
-	possibleMoves[3] = QPoint(+1, -1);  //вправо вверх
+	//possibleMoves[0] = QPoint(-1, +1);  //влево вниз
+	//possibleMoves[1] = QPoint(+1, +1);  //вправо вниз
+	//possibleMoves[2] = QPoint(-1, -1);  //влево вверх
+	//possibleMoves[3] = QPoint(+1, -1);  //вправо вверх
 
 
-	possibleMoves[4] = QPoint(0, 1); // вниз
-	possibleMoves[5] = QPoint(1, 0); // вправо
-	possibleMoves[4] = QPoint(0, -1); // вверх
-	possibleMoves[5] = QPoint(-1, 0); // влево
+	possibleMoves[0] = QPoint(0, 1); // вниз
+	possibleMoves[1] = QPoint(1, 0); // вправо
+	possibleMoves[2] = QPoint(0, -1); // вверх
+	possibleMoves[3] = QPoint(-1, 0); // влево
 
 
 	initialize();
@@ -140,7 +140,7 @@ void Game::prepareMap()
 // 
 int Game::getHeuristicEvaluation()
 {
-	if (this->bandit.y() == 0)
+	if (!checkRange(bandit))
 		return 0;
 
 	this->searchWay.clear();
