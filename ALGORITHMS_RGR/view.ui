@@ -76,7 +76,7 @@
           <item>
            <widget class="QRadioButton" name="rbRabbit">
             <property name="text">
-             <string>rabbit</string>
+             <string>bandit</string>
             </property>
             <property name="checked">
              <bool>true</bool>
@@ -86,7 +86,7 @@
           <item>
            <widget class="QRadioButton" name="rbWolf">
             <property name="text">
-             <string>wolf</string>
+             <string>policemen</string>
             </property>
            </widget>
           </item>

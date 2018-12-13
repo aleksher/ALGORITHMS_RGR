@@ -98,6 +98,7 @@ void View::paintEvent(QPaintEvent *)
 	QFont font = p.font();
 	font.setPointSize(font.pointSize() * 2);
 	p.setFont(font);
+
 	//draw monsters
 	for (int i = 0; i < this->game->getMonsterCount(); i++)
 		if (i != this->game->getSelectedMonsterIndex())
@@ -124,6 +125,7 @@ void View::paintEvent(QPaintEvent *)
 		p.setPen(Qt::NoPen);
 		auto monster_title = this->game->getSelectedMonsterIndex() == Game::MT_POLICEMEN ? "P" : "B";
 		p.drawEllipse(this->realMousePosition, 20, 20);
+		p.setFont(font);
 		p.drawText(this->realMousePosition, monster_title);
 	}
 }

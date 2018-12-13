@@ -128,8 +128,8 @@ public:
     {
         View->setWindowTitle(QApplication::translate("View", "View", nullptr));
         gbPlayMode->setTitle(QApplication::translate("View", "Play mode", nullptr));
-        rbRabbit->setText(QApplication::translate("View", "rabbit", nullptr));
-        rbWolf->setText(QApplication::translate("View", "wolf", nullptr));
+        rbRabbit->setText(QApplication::translate("View", "bandit", nullptr));
+        rbWolf->setText(QApplication::translate("View", "policemen", nullptr));
         gbLevel->setTitle(QApplication::translate("View", "Level", nullptr));
         pbPlay->setText(QApplication::translate("View", "Start", nullptr));
     } // retranslateUi

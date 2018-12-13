@@ -29,7 +29,7 @@ public:
 	int getMonsterCount() { return 2; }
 	MonsterType getPlayMode() { return this->gameMode; }
 
-	QPoint& getRabbitPosition() { return rabbit; }
+	QPoint& getBanditPosition() { return bandit; }
 	QPoint& getWolfPosition(int wolfIndex)
 	{
 		Q_ASSERT(wolfIndex < 4 && wolfIndex >= 0);
@@ -42,7 +42,7 @@ public:
 	QPoint& getMonsterPosition(int monsterIndex)
 	{
 		if (monsterIndex == 0)
-			return getRabbitPosition();
+			return getBanditPosition();
 		else
 			return getWolfPosition(monsterIndex - 1);
 	}
@@ -59,16 +59,12 @@ public:
 	void setSelectedMonsterIndex(int monsterIndex) { this->selectedMonster = monsterIndex; }
 	int isPlayersTurn() { return playersTurn; }
 
-	//����� / ������� ����
 	void reset();
 
-	//���������� ������ �������, ������� ��������� � ��������� ��������, ���� -1
 	int getMonsterIndexOnPosition(const QPoint& pos);
 
-	//true ���� ��������� ������ ����� ����� �� ��������� ��������
 	bool canMoveToPosition(int monsterIndex, const QPoint& pos);
 
-	//���������� ����������� ������������� ������� �� ��������� �������
 	bool moveSelectedMonsterToPosition(const QPoint& pos);
 
 	bool isGameOver(MonsterType& winner);
@@ -78,16 +74,16 @@ private:
 	static const int NOT_INITIALIZED = 255;
 
 	static const int EMPTY = 0;
-	static const int RABBIT = 1;
-	static const int WOLF = 255;
+	static const int BANDIT = 1;
+	static const int POLICEMEN = 255;
 
 	QPoint wolfs[4];
-	QPoint rabbit;
+	QPoint bandit;
 	MonsterType gameMode;
 
 	int map[8][8];
 	QQueue<QPoint> searchWay;
-	QPoint possibleMoves[4];
+	QPoint possibleMoves[8];
 
 	bool active;
 	bool playersTurn;
@@ -96,21 +92,16 @@ private:
 
 	void initialize();
 
-	//������� �������� �� ����������� � ������������� ������
 	bool canMove(int x, int y);
 	bool canMove(const QPoint& point) { return canMove(point.x(), point.y()); }
 
-	//��������� ������������� ������ ����������� ������. ��� ������, ��� ��������� ��� ������� �����
 	int getHeuristicEvaluation();
 
-	//����������, ��� ��������, ��������� ��� �������������� ����������
 	int runMinMax(MonsterType monster, int recursiveLevel, int alpha, int beta);
 
-	//������������ ���������� ��� ��������� ������������ �������� �� �����
 	void temporaryMonsterMovement(int monsterIndex, int x, int y);
 	void temporaryMonsterMovement(int monsterIndex, const QPoint& point) { temporaryMonsterMovement(monsterIndex, point.x(), point.y()); }
 
-	//����������� ����� ��� ������ � ������������� �������� � �������� �� ������������ ������������
 	void prepareMap();
 };
 
