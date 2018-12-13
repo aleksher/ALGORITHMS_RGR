@@ -11,7 +11,7 @@ View::View(QWidget *parent) :
 	//ui(new Ui::View)
 {
 	ui.setupUi(this);
-	this->setWindowTitle("Rabbit&Wolfs");
+	this->setWindowTitle("Policemen&Bandit");
 
 	QTimer* updater = new QTimer(this);
 	updater->start(30);
@@ -68,6 +68,7 @@ void View::mouseReleaseEvent(QMouseEvent *e)
 
 }
 
+// TODO: names
 void View::pbPlayClicked()
 {
 	this->ui.pbPlay->setText("Restart");
@@ -83,18 +84,16 @@ void View::paintEvent(QPaintEvent *)
 	p.setPen(Qt::NoPen);
 
 	//draw grid
-	p.setBrush(QBrush(QColor(40, 40, 40)));
-	for (int i = 0; i < 8; i++)
-		for (int k = 0; k < 8; k++)
-			if ((i + k) % 2 == 0) p.drawRect(i * 50, k * 50, 50, 50);
-
-	p.setBrush(QBrush(QColor(210, 210, 210)));
-	for (int i = 0; i < 8; i++)
-		for (int k = 0; k < 8; k++)
-			if ((i + k) % 2 != 0) p.drawRect(i * 50, k * 50, 50, 50);
-
 	p.setPen(Qt::SolidLine);
 	p.drawLine(400, 0, 400, 400);
+	for (int i = 0; i < 8; i++)
+	{
+		// вертикальные линии
+		p.drawLine(i * 50, 0, i * 50, 400);
+
+		// горизонтальные линии
+		p.drawLine(0, i * 50, 400, i * 50);
+	}
 
 	//draw monsters
 	for (int i = 0; i < this->game->getMonsterCount(); i++)
