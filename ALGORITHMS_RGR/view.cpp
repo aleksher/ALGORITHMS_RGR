@@ -73,7 +73,7 @@ void View::pbPlayClicked()
 {
 	this->ui.pbPlay->setText("Restart");
 
-	this->game->setPlayMode(ui.rbRabbit->isChecked() ? Game::MT_RABBIT : Game::MT_WOLF);
+	this->game->setPlayMode(ui.rbRabbit->isChecked() ? Game::MT_BANDIT : Game::MT_POLICEMEN);
 	this->game->setAILevel(ui.sbAILevel->value());
 	this->game->reset();
 }
@@ -90,20 +90,26 @@ void View::paintEvent(QPaintEvent *)
 	{
 		// вертикальные линии
 		p.drawLine(i * 50, 0, i * 50, 400);
-
 		// горизонтальные линии
 		p.drawLine(0, i * 50, 400, i * 50);
 	}
 
+	// шрифт для надписей
+	QFont font = p.font();
+	font.setPointSize(font.pointSize() * 2);
+	p.setFont(font);
 	//draw monsters
 	for (int i = 0; i < this->game->getMonsterCount(); i++)
 		if (i != this->game->getSelectedMonsterIndex())
 		{
-			p.setBrush(QBrush(QColor(this->game->getMonsterType(i) == Game::MT_WOLF ? 200 : 40, 40, this->game->getMonsterType(i) == Game::MT_RABBIT ? 200 : 40)));
-			p.drawEllipse(this->game->getMonsterPosition(i) * 50 + QPoint(25, 25), 20, 20);
+			p.setBrush(QBrush(QColor(255,255,255)));
+			auto position = this->game->getMonsterPosition(i);
+			p.drawEllipse(position * 50 + QPoint(25, 25), 20, 20);
+			auto monster_title = this->game->getMonsterType(i) == Game::MT_POLICEMEN ? "P" : "B";
+			p.drawText(position * 50 + QPoint(20, 33), monster_title);
 		}
 
-
+	// TODO: пропадает буква при перемещении
 	if (this->game->getSelectedMonsterIndex() >= 0)
 		if (!(this->mousePosition.x() < 0 || this->mousePosition.y() < 0 || this->mousePosition.x() > 7 || this->mousePosition.y() > 7))
 			if (this->game->canMoveToPosition(this->game->getSelectedMonsterIndex(), this->mousePosition))
@@ -116,9 +122,9 @@ void View::paintEvent(QPaintEvent *)
 	if (game->getSelectedMonsterIndex() >= 0)
 	{
 		p.setPen(Qt::NoPen);
-		p.setBrush(QBrush(QColor(this->game->getMonsterType(this->game->getSelectedMonsterIndex()) == Game::MT_WOLF ? 255 : 40, 40,
-			this->game->getMonsterType(this->game->getSelectedMonsterIndex()) == Game::MT_RABBIT ? 255 : 40)));
+		auto monster_title = this->game->getSelectedMonsterIndex() == Game::MT_POLICEMEN ? "P" : "B";
 		p.drawEllipse(this->realMousePosition, 20, 20);
+		p.drawText(this->realMousePosition, monster_title);
 	}
 }
 

@@ -17,8 +17,8 @@ void Game::reset()
 	this->active = true;
 	initialize();
 
-	if (this->gameMode != MT_RABBIT)
-		runMinMax((gameMode == MT_RABBIT) ? MT_WOLF : MT_RABBIT, 0, -EPIC_BIG_VALUE, +EPIC_BIG_VALUE);
+	if (this->gameMode != MT_BANDIT)
+		runMinMax((gameMode == MT_BANDIT) ? MT_POLICEMEN : MT_BANDIT, 0, -EPIC_BIG_VALUE, +EPIC_BIG_VALUE);
 
 	this->playersTurn = true;
 }
@@ -76,7 +76,7 @@ bool Game::isGameOver(MonsterType& winner)
 				canMove = true;
 
 	if (!canMove || this->rabbit.y() == 0)
-		winner = MT_RABBIT;
+		winner = MT_BANDIT;
 
 	canMove = false;
 	for (int i = 0; i < 4; i++)
@@ -84,7 +84,7 @@ bool Game::isGameOver(MonsterType& winner)
 			canMove = true;
 
 	if (!canMove)
-		winner = MT_WOLF;
+		winner = MT_POLICEMEN;
 
 	if (winner != MT_NO_ONE)
 	{
@@ -113,7 +113,7 @@ bool Game::moveSelectedMonsterToPosition(const QPoint &pos)
 		return true;
 
 	this->playersTurn = !this->playersTurn;
-	runMinMax(this->gameMode == MT_RABBIT ? MT_WOLF : MT_RABBIT, 0, -EPIC_BIG_VALUE, +EPIC_BIG_VALUE);
+	runMinMax(this->gameMode == MT_BANDIT ? MT_POLICEMEN : MT_BANDIT, 0, -EPIC_BIG_VALUE, +EPIC_BIG_VALUE);
 	this->playersTurn = !this->playersTurn;
 
 	isGameOver();
@@ -204,7 +204,7 @@ int Game::runMinMax(MonsterType monster, int recursiveLevel, int alpha, int beta
 	//������ ���������� ����. 0-7 - ��������� ���� ������, 8-11 - ��������� ���� �����
 	int bestMove = NOT_INITIALIZED;
 
-	bool isWolf = (monster == MT_WOLF);
+	bool isWolf = (monster == MT_POLICEMEN);
 	int MinMax = isWolf ? MIN_VALUE : MAX_VALUE;
 
 	//���������� ��� ��������� ���� ������� �������
@@ -220,13 +220,13 @@ int Game::runMinMax(MonsterType monster, int recursiveLevel, int alpha, int beta
 			temporaryMonsterMovement(curMonster, curMove);
 
 			//���������, ��������� ����� ���, ������� �� �������
-			test = runMinMax(isWolf ? MT_RABBIT : MT_WOLF, recursiveLevel + 1, alpha, beta);
+			test = runMinMax(isWolf ? MT_BANDIT : MT_POLICEMEN, recursiveLevel + 1, alpha, beta);
 
 			//... � ��������������� �������� ���������
 			temporaryMonsterMovement(curMonster, -curMove);
 
 			//���� �� ����� ����, ��� ���� �� ����� - ��������, ��� �� ������
-			if ((test > MinMax && monster == MT_WOLF) || (test <= MinMax && monster == MT_RABBIT) || (bestMove == NOT_INITIALIZED))
+			if ((test > MinMax && monster == MT_POLICEMEN) || (test <= MinMax && monster == MT_BANDIT) || (bestMove == NOT_INITIALIZED))
 			{
 				MinMax = test;
 				bestMove = i;
@@ -253,7 +253,7 @@ int Game::runMinMax(MonsterType monster, int recursiveLevel, int alpha, int beta
 	//�� � ����������, �����, ���� ��� ������� ������ ���
 	if (recursiveLevel == 0 && bestMove != NOT_INITIALIZED)
 	{
-		if (monster == MT_WOLF)
+		if (monster == MT_POLICEMEN)
 			this->wolfs[bestMove / 2] += this->possibleMoves[bestMove % 2];
 		else
 			this->rabbit += this->possibleMoves[bestMove % 4];

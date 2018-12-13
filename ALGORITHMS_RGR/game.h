@@ -17,8 +17,8 @@ public:
 
 	enum MonsterType {
 		MT_NO_ONE = 0,
-		MT_RABBIT = 1,
-		MT_WOLF = 2
+		MT_BANDIT = 1,
+		MT_POLICEMEN = 2
 	};
 
 	void setActive(bool active) { this->active = active; }
@@ -26,7 +26,7 @@ public:
 
 	void setAILevel(int AILevel) { this->AILevel = AILevel; }
 	void setPlayMode(MonsterType gameMode) { this->gameMode = gameMode; }
-	int getMonsterCount() { return 5; }
+	int getMonsterCount() { return 2; }
 	MonsterType getPlayMode() { return this->gameMode; }
 
 	QPoint& getRabbitPosition() { return rabbit; }
@@ -50,9 +50,9 @@ public:
 	MonsterType getMonsterType(int monsterIndex)
 	{
 		if (monsterIndex == 0)
-			return MT_RABBIT;
+			return MT_BANDIT;
 		else
-			return MT_WOLF;
+			return MT_POLICEMEN;
 	}
 
 	int getSelectedMonsterIndex() { return selectedMonster; }
