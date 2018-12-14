@@ -74,7 +74,7 @@ bool Game::isGameOver(MonsterType& winner)
 {
 	winner = MT_NO_ONE;
 
-	auto policeman_pos = getWolfPosition();
+	auto policeman_pos = getPolicemanPosition();
 	auto bandit_pos = getBanditPosition();
 
 	if (policeman_pos == bandit_pos)
@@ -149,20 +149,29 @@ int Game::getHeuristicEvaluation()
 	{
 		QPoint currentPosition = this->searchWay.dequeue(); //current position
 		for (int i = 0; i < 4; i++)
-			if (canMove(currentPosition + possibleMoves[i]))
+		{
+			auto res = currentPosition + possibleMoves[i];
+			if (canMove(currentPosition + possibleMoves[i]) /*&& map[res.y()][res.x() != POLICEMEN]*/)
 			{
 				QPoint newPosition = currentPosition + possibleMoves[i]; //new position
 				this->map[newPosition.y()][newPosition.x()] = this->map[currentPosition.y()][currentPosition.x()] + 1;
 				this->searchWay.enqueue(newPosition);
 			}
+		}
 	}
-
-	int min = MAX_VALUE;
+	// поиск по вертикали
+	int min1 = MAX_VALUE;
 	for (int i = 0; i < 4; i++)
-		if ((this->map[0][i * 2] > MIN_VALUE) && (this->map[0][i * 2] < min))
-			min = this->map[0][i * 2];
+		if ((this->map[0][i] > MIN_VALUE) && (this->map[0][i] < min1))
+			min1 = this->map[0][i];
 
-	return min - 1;
+	// поиск по горизонтали
+	int min2 = MAX_VALUE;
+	for (int i = 0; i < 4; i++)
+		if ((this->map[0][i] > MIN_VALUE) && (this->map[0][i] < min2))
+			min2 = this->map[0][i];
+
+	return min1 < min2 ? min1 - 1 : min2 - 1;
 }
 
 void Game::temporaryMonsterMovement(int monsterIndex, int x, int y)

@@ -30,7 +30,7 @@ public:
 	MonsterType getPlayMode() { return this->gameMode; }
 
 	QPoint& getBanditPosition() { return bandit; }
-	QPoint& getWolfPosition()
+	QPoint& getPolicemanPosition()
 	{
 		return policeman;
 	}
@@ -43,7 +43,7 @@ public:
 		if (monsterIndex == 0)
 			return getBanditPosition();
 		else
-			return getWolfPosition();
+			return getPolicemanPosition();
 	}
 
 	MonsterType getMonsterType(int monsterIndex)
@@ -73,7 +73,7 @@ public:
 private:
 	static const int NOT_INITIALIZED = 255;
 
-	static const int STOP = -1;
+	static const int STOP = 256;
 	static const int EMPTY = 0;
 	static const int BANDIT = 1;
 	static const int POLICEMEN = 255;
