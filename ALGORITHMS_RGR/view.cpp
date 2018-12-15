@@ -68,7 +68,6 @@ void View::mouseReleaseEvent(QMouseEvent *e)
 
 }
 
-// TODO: names
 void View::pbPlayClicked()
 {
 	this->ui.pbPlay->setText("Restart");

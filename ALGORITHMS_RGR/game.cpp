@@ -131,7 +131,7 @@ void Game::prepareMap()
 
 	this->map[this->bandit.y()][this->bandit.x()] = BANDIT;
 	this->map[this->policeman.y()][this->policeman.x()] = POLICEMEN;
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < stops_count; i++)
 	{
 		this->map[this->stops[i].y()][this->stops[i].x()] = STOP;
 	}
@@ -284,8 +284,9 @@ void Game::initialize()
 	int y = rand() % 6;
 	/*this->policeman = QPoint(2, 1);
 	this->bandit = QPoint(4, 5);*/
+	stops = new QPoint[stops_count];
 	while ((this->policeman = QPoint(rand() % 7, rand() % 7)) == (this->bandit = QPoint(2 + rand() % 5, 2 + rand() % 5)));
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < stops_count; i++)
 	{
 		QPoint stop;
 		while ((stop = QPoint(rand() % 7, rand() % 7)) == this->policeman || (stop = QPoint(rand() % 7, rand() % 7)) == this->bandit);
