@@ -74,7 +74,7 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_2">
           <item>
-           <widget class="QRadioButton" name="rbRabbit">
+           <widget class="QRadioButton" name="rbBandit">
             <property name="text">
              <string>bandit</string>
             </property>
@@ -84,9 +84,9 @@
            </widget>
           </item>
           <item>
-           <widget class="QRadioButton" name="rbWolf">
+           <widget class="QRadioButton" name="rbPoliceman">
             <property name="text">
-             <string>policemen</string>
+             <string>policeman</string>
             </property>
            </widget>
           </item>

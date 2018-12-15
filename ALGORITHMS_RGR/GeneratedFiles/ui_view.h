@@ -33,8 +33,8 @@ public:
     QVBoxLayout *verticalLayout;
     QGroupBox *gbPlayMode;
     QVBoxLayout *verticalLayout_2;
-    QRadioButton *rbRabbit;
-    QRadioButton *rbWolf;
+    QRadioButton *rbBandit;
+    QRadioButton *rbPoliceman;
     QGroupBox *gbLevel;
     QVBoxLayout *verticalLayout_3;
     QSpinBox *sbAILevel;
@@ -74,16 +74,16 @@ public:
         verticalLayout_2->setSpacing(6);
         verticalLayout_2->setContentsMargins(11, 11, 11, 11);
         verticalLayout_2->setObjectName(QStringLiteral("verticalLayout_2"));
-        rbRabbit = new QRadioButton(gbPlayMode);
-        rbRabbit->setObjectName(QStringLiteral("rbRabbit"));
-        rbRabbit->setChecked(true);
+        rbBandit = new QRadioButton(gbPlayMode);
+        rbBandit->setObjectName(QStringLiteral("rbBandit"));
+        rbBandit->setChecked(true);
 
-        verticalLayout_2->addWidget(rbRabbit);
+        verticalLayout_2->addWidget(rbBandit);
 
-        rbWolf = new QRadioButton(gbPlayMode);
-        rbWolf->setObjectName(QStringLiteral("rbWolf"));
+        rbPoliceman = new QRadioButton(gbPlayMode);
+        rbPoliceman->setObjectName(QStringLiteral("rbPoliceman"));
 
-        verticalLayout_2->addWidget(rbWolf);
+        verticalLayout_2->addWidget(rbPoliceman);
 
 
         verticalLayout->addWidget(gbPlayMode);
@@ -128,8 +128,8 @@ public:
     {
         View->setWindowTitle(QApplication::translate("View", "View", nullptr));
         gbPlayMode->setTitle(QApplication::translate("View", "Play mode", nullptr));
-        rbRabbit->setText(QApplication::translate("View", "bandit", nullptr));
-        rbWolf->setText(QApplication::translate("View", "policemen", nullptr));
+        rbBandit->setText(QApplication::translate("View", "bandit", nullptr));
+        rbPoliceman->setText(QApplication::translate("View", "policeman", nullptr));
         gbLevel->setTitle(QApplication::translate("View", "Level", nullptr));
         pbPlay->setText(QApplication::translate("View", "Start", nullptr));
     } // retranslateUi

@@ -11,8 +11,9 @@ View::View(QWidget *parent) :
 	//ui(new Ui::View)
 {
 	ui.setupUi(this);
-	this->setWindowTitle("Policemen&Bandit");
-	//this->resize(100, 100);
+	ui.centralWidget->adjustSize();
+	ui.centralWidget->resize(1000, 1000);
+	this->setWindowTitle("Policeman&Bandit");
 	QTimer* updater = new QTimer(this);
 	updater->start(30);
 
@@ -72,7 +73,7 @@ void View::pbPlayClicked()
 {
 	this->ui.pbPlay->setText("Restart");
 
-	this->game->setPlayMode(ui.rbRabbit->isChecked() ? Game::MT_BANDIT : Game::MT_POLICEMEN);
+	this->game->setPlayMode(ui.rbBandit->isChecked() ? Game::MT_BANDIT : Game::MT_POLICEMEN);
 	this->game->setAILevel(ui.sbAILevel->value());
 	this->game->reset();
 }
