@@ -147,7 +147,7 @@ void Game::prepareMap()
 // 
 int Game::getHeuristicEvaluation()
 {
-	if (!checkRange(bandit))
+	if (!checkRange(this->bandit))
 	{
 		return 0;
 	}
@@ -159,7 +159,7 @@ int Game::getHeuristicEvaluation()
 		for (int i = 0; i < 4; i++)
 		{
 			auto res = currentPosition + possibleMoves[i];
-			if (canMove(res) && map[res.y()][res.x()] != POLICEMEN)
+			if (canMove(res))
 			{
 				this->map[res.y()][res.x()] = this->map[currentPosition.y()][currentPosition.x()] + 1;
 				this->searchWay.enqueue(res);
