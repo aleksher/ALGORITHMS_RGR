@@ -63,7 +63,7 @@ bool Game::canMoveToPosition(int monsterIndex, const QPoint &pos)
 	if (oldPosition == pos)
 		return false;
 
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < stops_count; i++)
 		if (stops[i] == pos)
 			return false;
 
@@ -289,7 +289,18 @@ void Game::initialize()
 	for (int i = 0; i < stops_count; i++)
 	{
 		QPoint stop;
-		while ((stop = QPoint(rand() % 7, rand() % 7)) == this->policeman || (stop = QPoint(rand() % 7, rand() % 7)) == this->bandit);
+		bool duplicates = true;
+		int count = 0;
+		while ((stop = QPoint(rand() % 7, rand() % 7)) == this->policeman || (stop = QPoint(rand() % 7, rand() % 7)) == this->bandit
+			|| duplicates)
+		{
+			for (int i = 0; i < count; i++)
+			{
+				if (stops[i] == stop)
+					duplicates = false;
+			}
+			count++;
+		}
 		this->stops[i] = stop;
 	}
 

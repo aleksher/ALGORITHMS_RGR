@@ -111,7 +111,7 @@ void View::paintEvent(QPaintEvent *)
 
 	// нарисуем препятствия
 	//p.setBrush(QBrush(QColor(40, 40, 40)));
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < game->stops_count; i++)
 	{
 		p.drawRect(game->stops[i].x() * 50, game->stops[i].y() * 50, 50, 50);
 	}
