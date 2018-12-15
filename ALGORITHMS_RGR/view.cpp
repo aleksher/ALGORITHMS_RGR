@@ -7,12 +7,11 @@
 #include <QMessageBox>
 
 View::View(QWidget *parent) :
-	QMainWindow(parent)//,
-	//ui(new Ui::View)
+	QMainWindow(parent)
 {
 	ui.setupUi(this);
-	ui.centralWidget->adjustSize();
-	ui.centralWidget->resize(1000, 1000);
+	ui.centralWidget->setBaseSize(800, 800);
+	//ui.horizontalSpacer->changeSize()
 	this->setWindowTitle("Policeman&Bandit");
 	QTimer* updater = new QTimer(this);
 	updater->start(30);

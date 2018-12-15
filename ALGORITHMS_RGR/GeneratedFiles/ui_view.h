@@ -45,9 +45,15 @@ public:
     {
         if (View->objectName().isEmpty())
             View->setObjectName(QStringLiteral("View"));
+        View->setWindowModality(Qt::NonModal);
         View->resize(515, 400);
+        QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(View->sizePolicy().hasHeightForWidth());
+        View->setSizePolicy(sizePolicy);
         View->setMinimumSize(QSize(515, 400));
-        View->setMaximumSize(QSize(515, 400));
+        View->setMaximumSize(QSize(1500, 1000));
         View->setBaseSize(QSize(500, 400));
         centralWidget = new QWidget(View);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));

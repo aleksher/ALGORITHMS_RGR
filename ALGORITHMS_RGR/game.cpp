@@ -5,10 +5,10 @@ Game::Game()
 	:active(false), selectedMonster(-1)
 {
 	//по диагонали
-	//possibleMoves[0] = QPoint(-1, +1);  //влево вниз
-	//possibleMoves[1] = QPoint(+1, +1);  //вправо вниз
-	//possibleMoves[2] = QPoint(-1, -1);  //влево вверх
-	//possibleMoves[3] = QPoint(+1, -1);  //вправо вверх
+	possibleMoves[4] = QPoint(-1, +1);  //влево вниз
+	possibleMoves[5] = QPoint(+1, +1);  //вправо вниз
+	possibleMoves[6] = QPoint(-1, -1);  //влево вверх
+	possibleMoves[7] = QPoint(+1, -1);  //вправо вверх
 
 
 	possibleMoves[0] = QPoint(0, 1); // вниз
@@ -56,6 +56,12 @@ bool Game::canMoveToPosition(int monsterIndex, const QPoint &pos)
 	if (abs(diff.x()) > 1 || abs(diff.y()) > 1)
 		return false;
 
+	// запрет бандиту ходить на полицейского
+	if (monsterIndex == 0 && this->policeman == pos)
+	{
+		return false;
+	}
+
 	// запрет бандиту ходить по диагонали
 	if (abs(diff.x()) == 1 && abs(diff.y()) == 1 && monsterIndex == 0)
 		return false;
@@ -63,6 +69,7 @@ bool Game::canMoveToPosition(int monsterIndex, const QPoint &pos)
 	if (oldPosition == pos)
 		return false;
 
+	// проверка на поход по препятствиям
 	for (int i = 0; i < stops_count; i++)
 		if (stops[i] == pos)
 			return false;
@@ -141,37 +148,60 @@ void Game::prepareMap()
 int Game::getHeuristicEvaluation()
 {
 	if (!checkRange(bandit))
+	{
 		return 0;
-
+	}
 	this->searchWay.clear();
 	this->searchWay.enqueue(this->bandit);
 	while (!this->searchWay.empty())
 	{
-		QPoint currentPosition = this->searchWay.dequeue(); //current position
+		QPoint currentPosition = this->searchWay.dequeue();
 		for (int i = 0; i < 4; i++)
 		{
 			auto res = currentPosition + possibleMoves[i];
-			if (canMove(currentPosition + possibleMoves[i]) /*&& map[res.y()][res.x() != POLICEMEN]*/)
+			if (canMove(res) && map[res.y()][res.x()] != POLICEMEN)
 			{
-				QPoint newPosition = currentPosition + possibleMoves[i]; //new position
-				this->map[newPosition.y()][newPosition.x()] = this->map[currentPosition.y()][currentPosition.x()] + 1;
-				this->searchWay.enqueue(newPosition);
+				this->map[res.y()][res.x()] = this->map[currentPosition.y()][currentPosition.x()] + 1;
+				this->searchWay.enqueue(res);
 			}
 		}
 	}
-	// поиск по вертикали
-	int min1 = MAX_VALUE;
-	for (int i = 0; i < 4; i++)
-		if ((this->map[0][i] > MIN_VALUE) && (this->map[0][i] < min1))
-			min1 = this->map[0][i];
 
-	// поиск по горизонтали
-	int min2 = MAX_VALUE;
-	for (int i = 0; i < 4; i++)
-		if ((this->map[0][i] > MIN_VALUE) && (this->map[0][i] < min2))
-			min2 = this->map[0][i];
+	// Доделать
+	int min = MAX_VALUE;
+	for (int i = 0; i < 8; i++)
+	{
+		if (this->map[0][i] > MIN_VALUE && this->map[0][i] < min)
+		{
+			min = this->map[0][i];
+		}
+	}
 
-	return min1 < min2 ? min1 - 1 : min2 - 1;
+	for (int i = 0; i < 8; i++)
+	{
+		if (this->map[7][i] > MIN_VALUE && this->map[7][i] < min)
+		{
+			min = this->map[7][i];
+		}
+	}
+
+	for (int i = 0; i < 8; i++)
+	{
+		if (this->map[i][0] > MIN_VALUE && this->map[i][0] < min)
+		{
+			min = this->map[i][0];
+		}
+	}
+
+	for (int i = 0; i < 8; i++)
+	{
+		if (this->map[i][7] > MIN_VALUE && this->map[i][7] < min)
+		{
+			min = this->map[i][7];
+		}
+	}
+
+	return min - 1;
 }
 
 void Game::temporaryMonsterMovement(int monsterIndex, int x, int y)
