@@ -280,8 +280,6 @@ int Game::runMinMax(MonsterType monster, int recursiveLevel, int alpha, int beta
 
 void Game::initialize()
 {
-	int x = rand() % 6;
-	int y = rand() % 6;
 	/*this->policeman = QPoint(2, 1);
 	this->bandit = QPoint(4, 5);*/
 	stops = new QPoint[stops_count];
@@ -289,15 +287,15 @@ void Game::initialize()
 	for (int i = 0; i < stops_count; i++)
 	{
 		QPoint stop;
-		bool duplicates = true;
+		bool flag = true;
 		int count = 0;
-		while ((stop = QPoint(rand() % 7, rand() % 7)) == this->policeman || (stop = QPoint(rand() % 7, rand() % 7)) == this->bandit
-			|| duplicates)
+		while (flag)
 		{
-			for (int i = 0; i < count; i++)
+			stop = QPoint(rand() % 7, rand() % 7);
+			for (int j = 0; j < count; j++)
 			{
-				if (stops[i] == stop)
-					duplicates = false;
+				if (stops[j] != stop && stop != this->policeman && stop != this->bandit)
+					flag = false;
 			}
 			count++;
 		}

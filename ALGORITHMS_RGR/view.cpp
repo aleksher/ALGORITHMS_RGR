@@ -12,7 +12,7 @@ View::View(QWidget *parent) :
 {
 	ui.setupUi(this);
 	this->setWindowTitle("Policemen&Bandit");
-
+	//this->resize(100, 100);
 	QTimer* updater = new QTimer(this);
 	updater->start(30);
 

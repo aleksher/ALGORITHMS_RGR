@@ -69,7 +69,7 @@ public:
 	bool isGameOver(MonsterType& winner);
 	bool isGameOver() { MonsterType winner; return isGameOver(winner); }
 	QPoint* stops; // препятствия
-	int stops_count = 10;
+	int stops_count = 7;
 
 private:
 	static const int NOT_INITIALIZED = 255;
