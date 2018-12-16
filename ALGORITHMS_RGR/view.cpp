@@ -142,7 +142,7 @@ void View::paintEvent(QPaintEvent *)
 		}
 
 	// нарисуем препятствия
-	//p.setBrush(QBrush(QColor(40, 40, 40)));
+	p.setBrush(QBrush(QColor(0, 0, 0)));
 	for (int i = 0; i < game->stops_count; i++)
 	{
 		p.drawRect(game->stops[i].x() * sq_size, game->stops[i].y() * sq_size, sq_size, sq_size);
@@ -157,9 +157,10 @@ void View::paintEvent(QPaintEvent *)
 				p.drawRect(QRect(this->mousePosition * sq_size, QSize(sq_size, sq_size)));
 			}
 
+	p.setBrush(QBrush(QColor(255, 255, 255)));
 	if (game->getSelectedMonsterIndex() >= 0)
 	{
-		p.setPen(Qt::NoPen);
+		p.setPen(QColor(256, 256, 256));
 		auto monster_title = this->game->getSelectedMonsterIndex() == Game::MT_POLICEMEN ? "P" : "B";
 		p.drawEllipse(this->realMousePosition, sq_size / 5 * 2, sq_size / 5 * 2);
 		p.setFont(font);

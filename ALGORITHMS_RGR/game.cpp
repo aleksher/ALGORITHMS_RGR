@@ -133,9 +133,10 @@ bool Game::moveSelectedMonsterToPosition(const QPoint &pos)
 
 void Game::prepareMap()
 {
-	for (int i = 0; i < 8; i++)
-		memset(this->map[i], 0, 8 * sizeof(int));
-
+	map.resize(m);
+	for (int i = 0; i < m  ; i++)
+		map[i].resize(n);
+	
 	this->map[this->bandit.y()][this->bandit.x()] = BANDIT;
 	this->map[this->policeman.y()][this->policeman.x()] = POLICEMEN;
 	for (int i = 0; i < stops_count; i++)
@@ -315,6 +316,7 @@ void Game::initialize()
 		return;
 	/*this->policeman = QPoint(2, 1);
 	this->bandit = QPoint(4, 5);*/
+	stops_count = m * n / 5;
 	stops = new QPoint[stops_count];
 	while ((this->policeman = QPoint(rand() % n, rand() % m)) == (this->bandit = QPoint(2 + rand() % n - 2, 2 + rand() % m - 2)));
 	for (int i = 0; i < stops_count; i++)

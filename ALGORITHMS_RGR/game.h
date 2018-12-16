@@ -91,7 +91,7 @@ private:
 	int m;
 	int n;
 
-	int map[8][8];
+	std::vector<std::vector<int>> map;
 	QQueue<QPoint> searchWay;
 	QPoint possibleMoves[8];
 
