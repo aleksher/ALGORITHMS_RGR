@@ -134,9 +134,9 @@ bool Game::moveSelectedMonsterToPosition(const QPoint &pos)
 void Game::prepareMap()
 {
 	map.resize(m);
-	for (int i = 0; i < m  ; i++)
+	for (int i = 0; i < m; i++)
 		map[i].resize(n);
-	
+
 	this->map[this->bandit.y()][this->bandit.x()] = BANDIT;
 	this->map[this->policeman.y()][this->policeman.x()] = POLICEMEN;
 	for (int i = 0; i < stops_count; i++)
@@ -240,67 +240,14 @@ bool Game::canMove(int x, int y)
 ///!!!!!
 int Game::runMinMax(MonsterType monster, int recursiveLevel, int alpha, int beta)
 {
-	if (recursiveLevel == 0)
-		this->prepareMap();
-
-	int test = NOT_INITIALIZED;
-
-	// на последнем уровне вернем эврестическое значение
-	if (recursiveLevel >= this->AILevel * 2)
+	prepareMap();
+	int heuristic = getHeuristicEvaluation();
+	if (getPlayMode() == MT_BANDIT)
 	{
-		int heuristic = getHeuristicEvaluation();
-		prepareMap();
-		return heuristic;
+		QPoint pol_pos = this->policeman;
+
 	}
 
-	// индекс выбранного пути. 0 - 8 возможные ходы полицейского, 9 - 12 возможные ходы бандита
-	int bestMove = NOT_INITIALIZED;
-
-	bool isPoliceman = monster == MT_POLICEMAN;
-	int MinMax = isPoliceman ? MIN_VALUE : MAX_VALUE;
-
-	// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	// переберем все возможные ходы игрока
-	for (int i = (isPoliceman ? 0 : 9); i < (isPoliceman ? 9 : 13); i++)
-	{
-		int curMonster = isPoliceman ? i / 2 + 1 : 0;
-		QPoint curMonsterPos = curMonster == 0 ? this->bandit : this->policeman;
-		QPoint curMove = this->possibleMoves[isPoliceman ? i % 8 : i % 4];
-
-		if (canMove(curMonsterPos + curMove, monster))
-		{
-			//ходим
-			temporaryMonsterMovement(curMonster, curMove);
-
-			// оценка выбранного хода
-			test = runMinMax(isPoliceman ? MT_BANDIT : MT_POLICEMAN, recursiveLevel + 1, alpha, beta);
-
-			// восстанавливаем исходное состояние
-			temporaryMonsterMovement(curMonster, -curMove);
-
-			// если ход лучше предыдущих - запомним его
-			if ((test > MinMax && monster == MT_POLICEMAN) || (test <= MinMax && monster == MT_BANDIT) || (bestMove == NOT_INITIALIZED))
-			{
-				MinMax = test;
-				bestMove = i;
-			}
-
-			if (isPoliceman)
-				alpha = qMax(alpha, test);
-			else
-				beta = qMin(beta, test);
-
-			if (beta < alpha)
-				break;
-		}
-	}
-
-	if (bestMove == NOT_INITIALIZED)
-	{
-		int heuristic = getHeuristicEvaluation();
-		prepareMap();
-		return heuristic;
-	}
 
 	// произведем ход
 	if (recursiveLevel == 0 && bestMove != NOT_INITIALIZED)
@@ -311,7 +258,7 @@ int Game::runMinMax(MonsterType monster, int recursiveLevel, int alpha, int beta
 			this->bandit += this->possibleMoves[bestMove % 4];
 	}
 
-	return MinMax;
+
 }
 
 void Game::initialize()
@@ -323,7 +270,7 @@ void Game::initialize()
 	this->bandit = QPoint(4, 5);*/
 	stops_count = m * n / 5;
 	stops = new QPoint[stops_count];
-	while ((this->policeman = QPoint(rand() % n, rand() % m)) == (this->bandit = QPoint(n/4 + rand() % (n/2), m/4 + rand() % (m/2))));
+	while ((this->policeman = QPoint(rand() % n, rand() % m)) == (this->bandit = QPoint(n / 4 + rand() % (n / 2), m / 4 + rand() % (m / 2))));
 	for (int i = 0; i < stops_count; i++)
 	{
 		QPoint stop;

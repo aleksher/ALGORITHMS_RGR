@@ -107,9 +107,6 @@ void View::paintEvent(QPaintEvent *)
 	// нарисуем строки
 	for (int i = 0; i < game->getArenaSize().x(); i++)
 	{
-		//// вертикальные линии
-		//p.drawLine(i * 50, 0, i * 50, 800);
-		// горизонтальные линии
 		p.drawLine(0, i * sq_size, width, i * sq_size);
 	}
 
@@ -118,8 +115,6 @@ void View::paintEvent(QPaintEvent *)
 	{
 		// вертикальные линии
 		p.drawLine(i * sq_size, 0, i * sq_size, height);
-		//// горизонтальные линии
-		//p.drawLine(0, i * row_size, 800, i * row_size);
 	}
 
 	// граница последнего собца
@@ -147,7 +142,7 @@ void View::paintEvent(QPaintEvent *)
 	{
 		p.drawRect(game->stops[i].x() * sq_size, game->stops[i].y() * sq_size, sq_size, sq_size);
 	}
-	// TODO: пропадает буква при перемещении
+
 	if (this->game->getSelectedMonsterIndex() >= 0)
 		if (!(this->mousePosition.x() < 0 || this->mousePosition.y() < 0 || this->mousePosition.x() > width || this->mousePosition.y() > height))
 			if (this->game->canMoveToPosition(this->game->getSelectedMonsterIndex(), this->mousePosition))
