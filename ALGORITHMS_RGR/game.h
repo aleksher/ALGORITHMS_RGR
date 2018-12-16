@@ -103,7 +103,7 @@ private:
 	void initialize();
 
 	bool canMove(int x, int y);
-	bool canMove(const QPoint& point, MonsterType monster) { return canMove(point.x(), point.y()); }
+	bool canMove(const QPoint& point) { return canMove(point.x(), point.y()); }
 
 	int getHeuristicEvaluation();
 

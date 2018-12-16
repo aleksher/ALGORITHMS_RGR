@@ -148,10 +148,6 @@ void Game::prepareMap()
 // 
 int Game::getHeuristicEvaluation()
 {
-	if (!checkRange(this->bandit))
-	{
-		return 0;
-	}
 	this->searchWay.clear();
 	this->searchWay.enqueue(this->bandit);
 	while (!this->searchWay.empty())
@@ -160,70 +156,14 @@ int Game::getHeuristicEvaluation()
 		for (int i = 0; i < 4; i++)
 		{
 			auto res = currentPosition + possibleMoves[i];
-			if (canMove(res, MT_POLICEMAN)) // КОСТЫЛЬ!!!
+			if (canMove(res))
 			{
 				this->map[res.y()][res.x()] = this->map[currentPosition.y()][currentPosition.x()] + 1;
 				this->searchWay.enqueue(res);
 			}
 		}
 	}
-
-	// Доделать
-	// поиск в перовй строке
-	int min = MAX_VALUE;
-	for (int i = 0; i < n; i++)
-	{
-		if (this->map[0][i] > MIN_VALUE && this->map[0][i] < min)
-		{
-			min = this->map[0][i];
-		}
-	}
-
-	// поиск в последней строке
-	for (int i = 0; i < n; i++)
-	{
-		if (this->map[m - 1][i] > MIN_VALUE && this->map[m - 1][i] < min)
-		{
-			min = this->map[m - 1][i];
-		}
-	}
-
-	// поиск в первом столбце
-	for (int i = 0; i < m; i++)
-	{
-		if (this->map[i][0] > MIN_VALUE && this->map[i][0] < min)
-		{
-			min = this->map[i][0];
-		}
-	}
-
-	// поиск в последнем столбце
-	for (int i = 0; i < m; i++)
-	{
-		if (this->map[i][n - 1] > MIN_VALUE && this->map[i][n - 1] < min)
-		{
-			min = this->map[i][n - 1];
-		}
-	}
-
-	// сколько нужно сделать шагов, чтобы выйти из поля
-	return min;
-}
-
-void Game::temporaryMonsterMovement(int monsterIndex, int x, int y)
-{
-	if (monsterIndex == 0)
-	{
-		this->map[this->bandit.y()][this->bandit.x()] = EMPTY;
-		this->map[this->bandit.y() + y][this->bandit.x() + x] = BANDIT;
-		this->bandit += QPoint(x, y);
-	}
-	else
-	{
-		this->map[this->policeman.y()][this->policeman.x()] = EMPTY;
-		this->map[this->policeman.y() + y][policeman.x() + x] = POLICEMEN;
-		this->policeman += QPoint(x, y);
-	}
+	return 0;
 }
 
 bool Game::canMove(int x, int y)
@@ -240,38 +180,41 @@ bool Game::canMove(int x, int y)
 ///!!!!!
 int Game::runMinMax(MonsterType monster, int recursiveLevel, int alpha, int beta)
 {
-	//while (!isGameOver())
-	//{
-		prepareMap();
-		// заполним карту расстояниями
-		getHeuristicEvaluation();
+	prepareMap();
+	// заполним карту расстояниями
+	getHeuristicEvaluation();
+
+
+	if (getPlayMode() == MT_BANDIT)
+	{
 		int min = MAX_VALUE;
 		int movement_index = 0;
-		if (getPlayMode() == MT_BANDIT)
+		for (int i = 0; i < 8; i++)
 		{
-			for (int i = 0; i < 8; i++)
+			QPoint new_pos = this->policeman + this->possibleMoves[i];
+			if (checkRange(new_pos) && map[new_pos.y()][new_pos.x()] < min)
 			{
-				QPoint new_pos = this->policeman + this->possibleMoves[i];
-				if (checkRange(new_pos) && map[new_pos.y()][new_pos.x()] < min)
-				{
-					min = map[new_pos.y()][new_pos.x()];
-					movement_index = i;
-				}
+				min = map[new_pos.y()][new_pos.x()];
+				movement_index = i;
 			}
-			this->policeman += possibleMoves[movement_index];
 		}
-	
-
-
-	//// произведем ход
-	//if (recursiveLevel == 0 && bestMove != NOT_INITIALIZED)
-	//{
-	//	if (monster == MT_POLICEMAN)
-	//		this->policeman += this->possibleMoves[bestMove % 2];
-	//	else
-	//		this->bandit += this->possibleMoves[bestMove % 4];
-	//}
-
+		this->policeman += possibleMoves[movement_index];
+	}
+	else if (getPlayMode() == MT_POLICEMAN)
+	{
+		int min = MAX_VALUE;
+		int movement_index = 0;
+		for (int i = 0; i < 4; i++)
+		{
+			QPoint new_pos = this->bandit + this->possibleMoves[i];
+			if (checkRange(new_pos) && map[new_pos.y()][new_pos.x()] < min)
+			{
+				min = map[new_pos.y()][new_pos.x()];
+				movement_index = i;
+			}
+		}
+		this->bandit += possibleMoves[movement_index];
+	}
 	return 0;
 }
 
