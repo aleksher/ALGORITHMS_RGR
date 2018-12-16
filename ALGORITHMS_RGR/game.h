@@ -105,12 +105,9 @@ private:
 	bool canMove(int x, int y);
 	bool canMove(const QPoint& point) { return canMove(point.x(), point.y()); }
 
-	int getHeuristicEvaluation();
+	void breath_search_bandit();
 
 	int runMinMax(MonsterType monster, int recursiveLevel, int alpha, int beta);
-
-	void temporaryMonsterMovement(int monsterIndex, int x, int y);
-	void temporaryMonsterMovement(int monsterIndex, const QPoint& point) { temporaryMonsterMovement(monsterIndex, point.x(), point.y()); }
 
 	void prepareMap();
 };

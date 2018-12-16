@@ -166,40 +166,6 @@
         </widget>
        </item>
        <item>
-        <widget class="QGroupBox" name="gbLevel">
-         <property name="maximumSize">
-          <size>
-           <width>91</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="title">
-          <string>Level</string>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout_3">
-          <item>
-           <widget class="QSpinBox" name="sbAILevel">
-            <property name="maximumSize">
-             <size>
-              <width>91</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="minimum">
-             <number>1</number>
-            </property>
-            <property name="maximum">
-             <number>4</number>
-            </property>
-            <property name="value">
-             <number>3</number>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item>
         <widget class="QPushButton" name="pbPlay">
          <property name="maximumSize">
           <size>
@@ -228,7 +194,6 @@
       </layout>
       <zorder>gbPlayMode</zorder>
       <zorder>verticalSpacer</zorder>
-      <zorder>gbLevel</zorder>
       <zorder>pbPlay</zorder>
       <zorder>groupBox</zorder>
      </widget>

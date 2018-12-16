@@ -130,7 +130,6 @@ bool Game::moveSelectedMonsterToPosition(const QPoint &pos)
 	return true;
 }
 
-
 void Game::prepareMap()
 {
 	map.resize(m);
@@ -145,8 +144,7 @@ void Game::prepareMap()
 	}
 }
 
-// 
-int Game::getHeuristicEvaluation()
+void Game::breath_search_bandit()
 {
 	this->searchWay.clear();
 	this->searchWay.enqueue(this->bandit);
@@ -163,26 +161,14 @@ int Game::getHeuristicEvaluation()
 			}
 		}
 	}
-	return 0;
 }
 
-bool Game::canMove(int x, int y)
-{
-	if (!checkRange(x, y))
-		return false;
 
-	if (map[y][x] != EMPTY)
-		return false;
-
-	return true;
-}
-
-///!!!!!
 int Game::runMinMax(MonsterType monster, int recursiveLevel, int alpha, int beta)
 {
 	prepareMap();
 	// заполним карту расстояниями
-	getHeuristicEvaluation();
+	breath_search_bandit();
 
 
 	if (getPlayMode() == MT_BANDIT)
@@ -251,3 +237,15 @@ void Game::initialize()
 		this->stops[i] = stop;
 	}
 }
+
+bool Game::canMove(int x, int y)
+{
+	if (!checkRange(x, y))
+		return false;
+
+	if (map[y][x] != EMPTY)
+		return false;
+
+	return true;
+}
+
