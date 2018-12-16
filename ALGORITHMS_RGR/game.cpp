@@ -310,6 +310,7 @@ int Game::runMinMax(MonsterType monster, int recursiveLevel, int alpha, int beta
 
 void Game::initialize()
 {
+
 	/*this->policeman = QPoint(2, 1);
 	this->bandit = QPoint(4, 5);*/
 	stops = new QPoint[stops_count];

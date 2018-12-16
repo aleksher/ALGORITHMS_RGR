@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>515</width>
-    <height>400</height>
+    <width>915</width>
+    <height>800</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -63,6 +63,12 @@
         <height>0</height>
        </size>
       </property>
+      <property name="maximumSize">
+       <size>
+        <width>115</width>
+        <height>16777215</height>
+       </size>
+      </property>
       <layout class="QVBoxLayout" name="verticalLayout">
        <property name="topMargin">
         <number>0</number>
@@ -76,6 +82,12 @@
           <size>
            <width>0</width>
            <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>91</width>
+           <height>16777215</height>
           </size>
          </property>
          <property name="title">
@@ -103,13 +115,76 @@
         </widget>
        </item>
        <item>
+        <widget class="QGroupBox" name="groupBox">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>80</height>
+          </size>
+         </property>
+         <property name="title">
+          <string>Size</string>
+         </property>
+         <widget class="QLineEdit" name="m_lineEdit">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>20</y>
+            <width>71</width>
+            <height>20</height>
+           </rect>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>71</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="placeholderText">
+           <string>m</string>
+          </property>
+         </widget>
+         <widget class="QLineEdit" name="n_lineEdit">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>50</y>
+            <width>71</width>
+            <height>20</height>
+           </rect>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>71</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="placeholderText">
+           <string>n</string>
+          </property>
+         </widget>
+        </widget>
+       </item>
+       <item>
         <widget class="QGroupBox" name="gbLevel">
+         <property name="maximumSize">
+          <size>
+           <width>91</width>
+           <height>16777215</height>
+          </size>
+         </property>
          <property name="title">
           <string>Level</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_3">
           <item>
            <widget class="QSpinBox" name="sbAILevel">
+            <property name="maximumSize">
+             <size>
+              <width>91</width>
+              <height>16777215</height>
+             </size>
+            </property>
             <property name="minimum">
              <number>1</number>
             </property>
@@ -126,6 +201,12 @@
        </item>
        <item>
         <widget class="QPushButton" name="pbPlay">
+         <property name="maximumSize">
+          <size>
+           <width>91</width>
+           <height>16777215</height>
+          </size>
+         </property>
          <property name="text">
           <string>Start</string>
          </property>
@@ -145,6 +226,11 @@
         </spacer>
        </item>
       </layout>
+      <zorder>gbPlayMode</zorder>
+      <zorder>verticalSpacer</zorder>
+      <zorder>gbLevel</zorder>
+      <zorder>pbPlay</zorder>
+      <zorder>groupBox</zorder>
      </widget>
     </item>
    </layout>

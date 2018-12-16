@@ -70,15 +70,23 @@ void View::mouseReleaseEvent(QMouseEvent *e)
 
 void View::pbPlayClicked()
 {
-	this->ui.pbPlay->setText("Restart");
-
-	this->game->setPlayMode(ui.rbBandit->isChecked() ? Game::MT_BANDIT : Game::MT_POLICEMEN);
-	this->game->setAILevel(ui.sbAILevel->value());
-	this->game->reset();
+	int m = ui.m_lineEdit->text().toInt();
+	int n = ui.n_lineEdit->text().toInt();
+	if (m > 0 && n > 0)
+	{
+		game->setActive(true);
+		this->game->setArenaSize(m, n);
+		this->ui.pbPlay->setText("Restart");
+		this->game->setPlayMode(ui.rbBandit->isChecked() ? Game::MT_BANDIT : Game::MT_POLICEMEN);
+		this->game->setAILevel(ui.sbAILevel->value());
+		this->game->reset();
+	}
 }
 
 void View::paintEvent(QPaintEvent *)
 {
+	if (!game->isActive())
+		return;
 	QPainter p(this);
 	p.setPen(Qt::NoPen);
 

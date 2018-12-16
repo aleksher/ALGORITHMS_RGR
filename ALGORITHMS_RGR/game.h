@@ -26,6 +26,7 @@ public:
 
 	void setAILevel(int AILevel) { this->AILevel = AILevel; }
 	void setPlayMode(MonsterType gameMode) { this->gameMode = gameMode; }
+	void setArenaSize(int m, int n) { this->m = m; this->n = n; }
 	int getMonsterCount() { return 2; }
 	MonsterType getPlayMode() { return this->gameMode; }
 
@@ -84,11 +85,16 @@ private:
 
 	MonsterType gameMode;
 
+
+	// размеры поля
+	int m;
+	int n;
+
 	int map[8][8];
 	QQueue<QPoint> searchWay;
 	QPoint possibleMoves[8];
 
-	bool active;
+	bool active = false;
 	bool playersTurn;
 	int AILevel;
 	int selectedMonster;
