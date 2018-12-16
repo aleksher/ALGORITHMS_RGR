@@ -92,14 +92,38 @@ void View::paintEvent(QPaintEvent *)
 
 	//draw grid
 	p.setPen(Qt::SolidLine);
-	p.drawLine(400, 0, 400, 400);
-	for (int i = 0; i < 8; i++)
+	
+	// рассчитаем размер строки
+	int row_size = 800 / game->getArenaSize().x();
+	int column_size = 800 / game->getArenaSize().y();
+	int sq_size = row_size > column_size ? column_size : row_size;
+
+	// высота поля
+	int height = sq_size * game->getArenaSize().x();
+
+	// ширина поля
+	int width = sq_size * game->getArenaSize().y();
+
+	// нарисуем строки
+	for (int i = 0; i < game->getArenaSize().x(); i++)
+	{
+		//// вертикальные линии
+		//p.drawLine(i * 50, 0, i * 50, 800);
+		// горизонтальные линии
+		p.drawLine(0, i * sq_size, width, i * sq_size);
+	}
+
+	// нарисуем столбцы
+	for (int i = 0; i < game->getArenaSize().y(); i++)
 	{
 		// вертикальные линии
-		p.drawLine(i * 50, 0, i * 50, 400);
-		// горизонтальные линии
-		p.drawLine(0, i * 50, 400, i * 50);
+		p.drawLine(i * sq_size, 0, i * sq_size, height);
+		//// горизонтальные линии
+		//p.drawLine(0, i * row_size, 800, i * row_size);
 	}
+
+	// граница последнего собца
+	p.drawLine(width, 0, width, height);
 
 	// шрифт для надписей
 	QFont font = p.font();
