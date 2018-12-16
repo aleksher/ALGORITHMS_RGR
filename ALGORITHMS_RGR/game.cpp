@@ -318,7 +318,7 @@ void Game::initialize()
 	this->bandit = QPoint(4, 5);*/
 	stops_count = m * n / 5;
 	stops = new QPoint[stops_count];
-	while ((this->policeman = QPoint(rand() % n, rand() % m)) == (this->bandit = QPoint(2 + rand() % n - 2, 2 + rand() % m - 2)));
+	while ((this->policeman = QPoint(rand() % n, rand() % m)) == (this->bandit = QPoint(n/4 + rand() % (n/2), m/4 + rand() % (m/2))));
 	for (int i = 0; i < stops_count; i++)
 	{
 		QPoint stop;
