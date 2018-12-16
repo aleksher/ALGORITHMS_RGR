@@ -202,15 +202,23 @@ int Game::runMinMax(MonsterType monster, int recursiveLevel, int alpha, int beta
 	}
 	else if (getPlayMode() == MT_POLICEMAN)
 	{
-		int min = MAX_VALUE;
+		int max = MIN_VALUE;
 		int movement_index = 0;
 		for (int i = 0; i < 4; i++)
 		{
 			QPoint new_pos = this->bandit + this->possibleMoves[i];
-			if (checkRange(new_pos) && map[new_pos.y()][new_pos.x()] < min)
+			if (checkRange(new_pos))
 			{
-				min = map[new_pos.y()][new_pos.x()];
+				if (map[new_pos.y()][new_pos.x()] > max && map[new_pos.y()][new_pos.x()] < 255)
+				{
+					max = map[new_pos.y()][new_pos.x()];
+					movement_index = i;
+				}
+			}
+			else
+			{
 				movement_index = i;
+				break;
 			}
 		}
 		this->bandit += possibleMoves[movement_index];
@@ -220,11 +228,8 @@ int Game::runMinMax(MonsterType monster, int recursiveLevel, int alpha, int beta
 
 void Game::initialize()
 {
-
 	if (!isActive())
 		return;
-	/*this->policeman = QPoint(2, 1);
-	this->bandit = QPoint(4, 5);*/
 	stops_count = m * n / 5;
 	stops = new QPoint[stops_count];
 	while ((this->policeman = QPoint(rand() % n, rand() % m)) == (this->bandit = QPoint(n / 4 + rand() % (n / 2), m / 4 + rand() % (m / 2))));
@@ -245,5 +250,4 @@ void Game::initialize()
 		}
 		this->stops[i] = stop;
 	}
-
 }
