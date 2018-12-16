@@ -169,8 +169,9 @@ int Game::getHeuristicEvaluation()
 	}
 
 	// Доделать
+	// поиск в перовй строке
 	int min = MAX_VALUE;
-	for (int i = 0; i < 8; i++)
+	for (int i = 0; i < n; i++)
 	{
 		if (this->map[0][i] > MIN_VALUE && this->map[0][i] < min)
 		{
@@ -178,15 +179,17 @@ int Game::getHeuristicEvaluation()
 		}
 	}
 
-	for (int i = 0; i < 8; i++)
+	// поиск в последней строке
+	for (int i = 0; i < n; i++)
 	{
-		if (this->map[7][i] > MIN_VALUE && this->map[7][i] < min)
+		if (this->map[m - 1][i] > MIN_VALUE && this->map[m - 1][i] < min)
 		{
-			min = this->map[7][i];
+			min = this->map[m - 1][i];
 		}
 	}
 
-	for (int i = 0; i < 8; i++)
+	// поиск в первом столбце
+	for (int i = 0; i < m; i++)
 	{
 		if (this->map[i][0] > MIN_VALUE && this->map[i][0] < min)
 		{
@@ -194,15 +197,17 @@ int Game::getHeuristicEvaluation()
 		}
 	}
 
-	for (int i = 0; i < 8; i++)
+	// поиск в последнем столбце
+	for (int i = 0; i < m; i++)
 	{
-		if (this->map[i][7] > MIN_VALUE && this->map[i][7] < min)
+		if (this->map[i][n - 1] > MIN_VALUE && this->map[i][n - 1] < min)
 		{
-			min = this->map[i][7];
+			min = this->map[i][n - 1];
 		}
 	}
 
-	return min - 1;
+	// сколько нужно сделать шагов, чтобы выйти из поля
+	return min;
 }
 
 void Game::temporaryMonsterMovement(int monsterIndex, int x, int y)
