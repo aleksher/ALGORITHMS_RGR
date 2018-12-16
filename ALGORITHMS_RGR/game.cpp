@@ -240,25 +240,39 @@ bool Game::canMove(int x, int y)
 ///!!!!!
 int Game::runMinMax(MonsterType monster, int recursiveLevel, int alpha, int beta)
 {
-	prepareMap();
-	int heuristic = getHeuristicEvaluation();
-	if (getPlayMode() == MT_BANDIT)
-	{
-		QPoint pol_pos = this->policeman;
+	//while (!isGameOver())
+	//{
+		prepareMap();
+		// заполним карту расстояниями
+		getHeuristicEvaluation();
+		int min = MAX_VALUE;
+		int movement_index = 0;
+		if (getPlayMode() == MT_BANDIT)
+		{
+			for (int i = 0; i < 8; i++)
+			{
+				QPoint new_pos = this->policeman + this->possibleMoves[i];
+				if (checkRange(new_pos) && map[new_pos.y()][new_pos.x()] < min)
+				{
+					min = map[new_pos.y()][new_pos.x()];
+					movement_index = i;
+				}
+			}
+			this->policeman += possibleMoves[movement_index];
+		}
+	
 
-	}
 
+	//// произведем ход
+	//if (recursiveLevel == 0 && bestMove != NOT_INITIALIZED)
+	//{
+	//	if (monster == MT_POLICEMAN)
+	//		this->policeman += this->possibleMoves[bestMove % 2];
+	//	else
+	//		this->bandit += this->possibleMoves[bestMove % 4];
+	//}
 
-	// произведем ход
-	if (recursiveLevel == 0 && bestMove != NOT_INITIALIZED)
-	{
-		if (monster == MT_POLICEMAN)
-			this->policeman += this->possibleMoves[bestMove % 2];
-		else
-			this->bandit += this->possibleMoves[bestMove % 4];
-	}
-
-
+	return 0;
 }
 
 void Game::initialize()
