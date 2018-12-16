@@ -77,7 +77,7 @@ void View::pbPlayClicked()
 		game->setActive(true);
 		this->game->setArenaSize(m, n);
 		this->ui.pbPlay->setText("Restart");
-		this->game->setPlayMode(ui.rbBandit->isChecked() ? Game::MT_BANDIT : Game::MT_POLICEMEN);
+		this->game->setPlayMode(ui.rbBandit->isChecked() ? Game::MT_BANDIT : Game::MT_POLICEMAN);
 		this->game->setAILevel(ui.sbAILevel->value());
 		this->game->reset();
 	}
@@ -137,7 +137,7 @@ void View::paintEvent(QPaintEvent *)
 			p.setBrush(QBrush(QColor(255,255,255)));
 			auto position = this->game->getMonsterPosition(i);
 			p.drawEllipse(position * sq_size + QPoint(sq_size/2, sq_size/2), sq_size / 5 * 2, sq_size / 5 * 2);
-			auto monster_title = this->game->getMonsterType(i) == Game::MT_POLICEMEN ? "P" : "B";
+			auto monster_title = this->game->getMonsterType(i) == Game::MT_POLICEMAN ? "P" : "B";
 			p.drawText(position * sq_size + QPoint(sq_size / 5 * 2, sq_size / 5 * 3), monster_title);
 		}
 
@@ -161,7 +161,7 @@ void View::paintEvent(QPaintEvent *)
 	if (game->getSelectedMonsterIndex() >= 0)
 	{
 		p.setPen(QColor(256, 256, 256));
-		auto monster_title = this->game->getSelectedMonsterIndex() == Game::MT_POLICEMEN ? "P" : "B";
+		auto monster_title = this->game->getSelectedMonsterIndex() == Game::MT_POLICEMAN ? "P" : "B";
 		p.drawEllipse(this->realMousePosition, sq_size / 5 * 2, sq_size / 5 * 2);
 		p.setFont(font);
 		p.drawText(this->realMousePosition, monster_title);

@@ -18,7 +18,7 @@ public:
 	enum MonsterType {
 		MT_NO_ONE = 0,
 		MT_BANDIT = 1,
-		MT_POLICEMEN = 2
+		MT_POLICEMAN = 2
 	};
 
 	void setActive(bool active) { this->active = active; }
@@ -53,7 +53,7 @@ public:
 		if (monsterIndex == 0)
 			return MT_BANDIT;
 		else
-			return MT_POLICEMEN;
+			return MT_POLICEMAN;
 	}
 
 	int getSelectedMonsterIndex() { return selectedMonster; }
@@ -103,7 +103,7 @@ private:
 	void initialize();
 
 	bool canMove(int x, int y);
-	bool canMove(const QPoint& point) { return canMove(point.x(), point.y()); }
+	bool canMove(const QPoint& point, MonsterType monster) { return canMove(point.x(), point.y()); }
 
 	int getHeuristicEvaluation();
 

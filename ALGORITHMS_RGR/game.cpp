@@ -26,7 +26,7 @@ void Game::reset()
 	initialize();
 
 	if (this->gameMode != MT_BANDIT)
-		runMinMax((gameMode == MT_BANDIT) ? MT_POLICEMEN : MT_BANDIT, 0, -EPIC_BIG_VALUE, +EPIC_BIG_VALUE);
+		runMinMax((gameMode == MT_BANDIT) ? MT_POLICEMAN : MT_BANDIT, 0, -EPIC_BIG_VALUE, +EPIC_BIG_VALUE);
 
 	this->playersTurn = true;
 }
@@ -86,7 +86,7 @@ bool Game::isGameOver(MonsterType& winner)
 
 	if (policeman_pos == bandit_pos)
 	{
-		winner = MT_POLICEMEN;
+		winner = MT_POLICEMAN;
 		return true;
 	}
 
@@ -123,7 +123,7 @@ bool Game::moveSelectedMonsterToPosition(const QPoint &pos)
 		return true;
 
 	this->playersTurn = !this->playersTurn;
-	runMinMax(this->gameMode == MT_BANDIT ? MT_POLICEMEN : MT_BANDIT, 0, -EPIC_BIG_VALUE, +EPIC_BIG_VALUE);
+	runMinMax(this->gameMode == MT_BANDIT ? MT_POLICEMAN : MT_BANDIT, 0, -EPIC_BIG_VALUE, +EPIC_BIG_VALUE);
 	this->playersTurn = !this->playersTurn;
 
 	isGameOver();
@@ -160,7 +160,7 @@ int Game::getHeuristicEvaluation()
 		for (int i = 0; i < 4; i++)
 		{
 			auto res = currentPosition + possibleMoves[i];
-			if (canMove(res))
+			if (canMove(res, MT_POLICEMAN)) // КОСТЫЛЬ!!!
 			{
 				this->map[res.y()][res.x()] = this->map[currentPosition.y()][currentPosition.x()] + 1;
 				this->searchWay.enqueue(res);
@@ -245,7 +245,7 @@ int Game::runMinMax(MonsterType monster, int recursiveLevel, int alpha, int beta
 
 	int test = NOT_INITIALIZED;
 
-	//�� ��������� ������ ������ (�� ������) ���������� �������� ������� ���������
+	// на последнем уровне вернем эврестическое значение
 	if (recursiveLevel >= this->AILevel * 2)
 	{
 		int heuristic = getHeuristicEvaluation();
@@ -253,38 +253,39 @@ int Game::runMinMax(MonsterType monster, int recursiveLevel, int alpha, int beta
 		return heuristic;
 	}
 
-	//������ ���������� ����. 0-7 - ��������� ���� ������, 8-11 - ��������� ���� �����
+	// индекс выбранного пути. 0 - 8 возможные ходы полицейского, 9 - 12 возможные ходы бандита
 	int bestMove = NOT_INITIALIZED;
 
-	bool isWolf = (monster == MT_POLICEMEN);
-	int MinMax = isWolf ? MIN_VALUE : MAX_VALUE;
+	bool isPoliceman = monster == MT_POLICEMAN;
+	int MinMax = isPoliceman ? MIN_VALUE : MAX_VALUE;
 
-	//���������� ��� ��������� ���� ������� �������
-	for (int i = (isWolf ? 0 : 8); i < (isWolf ? 8 : 12); i++)
+	// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	// переберем все возможные ходы игрока
+	for (int i = (isPoliceman ? 0 : 9); i < (isPoliceman ? 9 : 13); i++)
 	{
-		int curMonster = isWolf ? i / 2 + 1 : 0;
+		int curMonster = isPoliceman ? i / 2 + 1 : 0;
 		QPoint curMonsterPos = curMonster == 0 ? this->bandit : this->policeman;
-		QPoint curMove = this->possibleMoves[isWolf ? i % 2 : i % 4];
+		QPoint curMove = this->possibleMoves[isPoliceman ? i % 8 : i % 4];
 
-		if (canMove(curMonsterPos + curMove))
+		if (canMove(curMonsterPos + curMove, monster))
 		{
-			//...�����, ����� ���� ������������ ��������
+			//ходим
 			temporaryMonsterMovement(curMonster, curMove);
 
-			//���������, ��������� ����� ���, ������� �� �������
-			test = runMinMax(isWolf ? MT_BANDIT : MT_POLICEMEN, recursiveLevel + 1, alpha, beta);
+			// оценка выбранного хода
+			test = runMinMax(isPoliceman ? MT_BANDIT : MT_POLICEMAN, recursiveLevel + 1, alpha, beta);
 
-			//... � ��������������� �������� ���������
+			// восстанавливаем исходное состояние
 			temporaryMonsterMovement(curMonster, -curMove);
 
-			//���� �� ����� ����, ��� ���� �� ����� - ��������, ��� �� ������
-			if ((test > MinMax && monster == MT_POLICEMEN) || (test <= MinMax && monster == MT_BANDIT) || (bestMove == NOT_INITIALIZED))
+			// если ход лучше предыдущих - запомним его
+			if ((test > MinMax && monster == MT_POLICEMAN) || (test <= MinMax && monster == MT_BANDIT) || (bestMove == NOT_INITIALIZED))
 			{
 				MinMax = test;
 				bestMove = i;
 			}
 
-			if (isWolf)
+			if (isPoliceman)
 				alpha = qMax(alpha, test);
 			else
 				beta = qMin(beta, test);
@@ -294,7 +295,6 @@ int Game::runMinMax(MonsterType monster, int recursiveLevel, int alpha, int beta
 		}
 	}
 
-	//��� ������������ ���������, ����� ������ ������ - ���������� ��������� ������������� �������.
 	if (bestMove == NOT_INITIALIZED)
 	{
 		int heuristic = getHeuristicEvaluation();
@@ -302,10 +302,10 @@ int Game::runMinMax(MonsterType monster, int recursiveLevel, int alpha, int beta
 		return heuristic;
 	}
 
-	//�� � ����������, �����, ���� ��� ������� ������ ���
+	// произведем ход
 	if (recursiveLevel == 0 && bestMove != NOT_INITIALIZED)
 	{
-		if (monster == MT_POLICEMEN)
+		if (monster == MT_POLICEMAN)
 			this->policeman += this->possibleMoves[bestMove % 2];
 		else
 			this->bandit += this->possibleMoves[bestMove % 4];
