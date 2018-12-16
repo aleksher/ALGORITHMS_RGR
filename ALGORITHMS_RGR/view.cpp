@@ -6,12 +6,12 @@
 #include <QTimer>
 #include <QMessageBox>
 
+int sq_size = 0;
+
 View::View(QWidget *parent) :
 	QMainWindow(parent)
 {
 	ui.setupUi(this);
-	ui.centralWidget->setBaseSize(800, 800);
-	//ui.horizontalSpacer->changeSize()
 	this->setWindowTitle("Policeman&Bandit");
 	QTimer* updater = new QTimer(this);
 	updater->start(30);
@@ -34,7 +34,7 @@ void View::mousePressEvent(QMouseEvent *e)
 		return;
 
 	this->realMousePosition = e->pos();
-	int monsterIndex = this->game->getMonsterIndexOnPosition((e->pos() - QPoint(25, 25)) / 50);
+	int monsterIndex = this->game->getMonsterIndexOnPosition((e->pos() - QPoint(sq_size/2, sq_size/2)) / sq_size);
 	if (monsterIndex < 0)
 		return;
 
@@ -47,7 +47,7 @@ void View::mousePressEvent(QMouseEvent *e)
 void View::mouseMoveEvent(QMouseEvent *e)
 {
 	this->realMousePosition = e->pos();
-	this->mousePosition = (e->pos() - QPoint(25, 25)) / 50;
+	this->mousePosition = (e->pos() - QPoint(sq_size / 2, sq_size / 2)) / sq_size;
 }
 
 void View::mouseReleaseEvent(QMouseEvent *e)
@@ -59,7 +59,7 @@ void View::mouseReleaseEvent(QMouseEvent *e)
 		return;
 
 	this->realMousePosition = e->pos();
-	this->game->moveSelectedMonsterToPosition((e->pos() - QPoint(25, 25)) / 50);
+	this->game->moveSelectedMonsterToPosition((e->pos() - QPoint(sq_size / 2, sq_size / 2)) / sq_size);
 	this->game->setSelectedMonsterIndex(-1);
 
 	Game::MonsterType winner;
@@ -96,7 +96,7 @@ void View::paintEvent(QPaintEvent *)
 	// рассчитаем размер строки
 	int row_size = 800 / game->getArenaSize().x();
 	int column_size = 800 / game->getArenaSize().y();
-	int sq_size = row_size > column_size ? column_size : row_size;
+	sq_size = row_size > column_size ? column_size : row_size;
 
 	// высота поля
 	int height = sq_size * game->getArenaSize().x();
@@ -136,32 +136,32 @@ void View::paintEvent(QPaintEvent *)
 		{
 			p.setBrush(QBrush(QColor(255,255,255)));
 			auto position = this->game->getMonsterPosition(i);
-			p.drawEllipse(position * 50 + QPoint(25, 25), 20, 20);
+			p.drawEllipse(position * sq_size + QPoint(sq_size/2, sq_size/2), sq_size / 5 * 2, sq_size / 5 * 2);
 			auto monster_title = this->game->getMonsterType(i) == Game::MT_POLICEMEN ? "P" : "B";
-			p.drawText(position * 50 + QPoint(20, 33), monster_title);
+			p.drawText(position * sq_size + QPoint(20, 33), monster_title);
 		}
 
 	// нарисуем препятствия
 	//p.setBrush(QBrush(QColor(40, 40, 40)));
 	for (int i = 0; i < game->stops_count; i++)
 	{
-		p.drawRect(game->stops[i].x() * 50, game->stops[i].y() * 50, 50, 50);
+		p.drawRect(game->stops[i].x() * sq_size, game->stops[i].y() * sq_size, sq_size, sq_size);
 	}
 	// TODO: пропадает буква при перемещении
 	if (this->game->getSelectedMonsterIndex() >= 0)
-		if (!(this->mousePosition.x() < 0 || this->mousePosition.y() < 0 || this->mousePosition.x() > 7 || this->mousePosition.y() > 7))
+		if (!(this->mousePosition.x() < 0 || this->mousePosition.y() < 0 || this->mousePosition.x() > width || this->mousePosition.y() > height))
 			if (this->game->canMoveToPosition(this->game->getSelectedMonsterIndex(), this->mousePosition))
 			{
 				p.setPen(QPen(QBrush(Qt::white), 5));
 				p.setBrush(QBrush(QColor(210, 210, 210), Qt::NoBrush));
-				p.drawRect(QRect(this->mousePosition * 50, QSize(50, 50)));
+				p.drawRect(QRect(this->mousePosition * sq_size, QSize(sq_size, sq_size)));
 			}
 
 	if (game->getSelectedMonsterIndex() >= 0)
 	{
 		p.setPen(Qt::NoPen);
 		auto monster_title = this->game->getSelectedMonsterIndex() == Game::MT_POLICEMEN ? "P" : "B";
-		p.drawEllipse(this->realMousePosition, 20, 20);
+		p.drawEllipse(this->realMousePosition, sq_size / 5 * 2, sq_size / 5 * 2);
 		p.setFont(font);
 		p.drawText(this->realMousePosition, monster_title);
 	}

@@ -311,10 +311,12 @@ int Game::runMinMax(MonsterType monster, int recursiveLevel, int alpha, int beta
 void Game::initialize()
 {
 
+	if (!isActive())
+		return;
 	/*this->policeman = QPoint(2, 1);
 	this->bandit = QPoint(4, 5);*/
 	stops = new QPoint[stops_count];
-	while ((this->policeman = QPoint(rand() % 7, rand() % 7)) == (this->bandit = QPoint(2 + rand() % 5, 2 + rand() % 5)));
+	while ((this->policeman = QPoint(rand() % n, rand() % m)) == (this->bandit = QPoint(2 + rand() % n - 2, 2 + rand() % m - 2)));
 	for (int i = 0; i < stops_count; i++)
 	{
 		QPoint stop;
@@ -322,7 +324,7 @@ void Game::initialize()
 		int count = 0;
 		while (flag)
 		{
-			stop = QPoint(rand() % 7, rand() % 7);
+			stop = QPoint(rand() % n, rand() % m);
 			for (int j = 0; j < count; j++)
 			{
 				if (stops[j] != stop && stop != this->policeman && stop != this->bandit)

@@ -37,7 +37,7 @@ public:
 		return policeman;
 	}
 
-	bool checkRange(int x, int y) { return (x >= 0 && y >= 0 && x <= 7 && y <= 7); }
+	bool checkRange(int x, int y) { return (x >= 0 && y >= 0 && x < n && y < m); }
 	bool checkRange(const QPoint& point) { return checkRange(point.x(), point.y()); }
 
 	QPoint& getMonsterPosition(int monsterIndex)
