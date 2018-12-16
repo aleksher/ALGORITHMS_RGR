@@ -138,7 +138,7 @@ void View::paintEvent(QPaintEvent *)
 			auto position = this->game->getMonsterPosition(i);
 			p.drawEllipse(position * sq_size + QPoint(sq_size/2, sq_size/2), sq_size / 5 * 2, sq_size / 5 * 2);
 			auto monster_title = this->game->getMonsterType(i) == Game::MT_POLICEMEN ? "P" : "B";
-			p.drawText(position * sq_size + QPoint(20, 33), monster_title);
+			p.drawText(position * sq_size + QPoint(sq_size / 5 * 2, sq_size / 5 * 3), monster_title);
 		}
 
 	// нарисуем препятствия
