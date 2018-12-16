@@ -18,7 +18,6 @@
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QRadioButton>
 #include <QtWidgets/QSpacerItem>
-#include <QtWidgets/QSpinBox>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 
@@ -39,9 +38,6 @@ public:
     QGroupBox *groupBox;
     QLineEdit *m_lineEdit;
     QLineEdit *n_lineEdit;
-    QGroupBox *gbLevel;
-    QVBoxLayout *verticalLayout_3;
-    QSpinBox *sbAILevel;
     QPushButton *pbPlay;
     QSpacerItem *verticalSpacer;
 
@@ -114,25 +110,6 @@ public:
 
         verticalLayout->addWidget(groupBox);
 
-        gbLevel = new QGroupBox(widget);
-        gbLevel->setObjectName(QStringLiteral("gbLevel"));
-        gbLevel->setMaximumSize(QSize(91, 16777215));
-        verticalLayout_3 = new QVBoxLayout(gbLevel);
-        verticalLayout_3->setSpacing(6);
-        verticalLayout_3->setContentsMargins(11, 11, 11, 11);
-        verticalLayout_3->setObjectName(QStringLiteral("verticalLayout_3"));
-        sbAILevel = new QSpinBox(gbLevel);
-        sbAILevel->setObjectName(QStringLiteral("sbAILevel"));
-        sbAILevel->setMaximumSize(QSize(91, 16777215));
-        sbAILevel->setMinimum(1);
-        sbAILevel->setMaximum(4);
-        sbAILevel->setValue(3);
-
-        verticalLayout_3->addWidget(sbAILevel);
-
-
-        verticalLayout->addWidget(gbLevel);
-
         pbPlay = new QPushButton(widget);
         pbPlay->setObjectName(QStringLiteral("pbPlay"));
         pbPlay->setMaximumSize(QSize(91, 16777215));
@@ -144,7 +121,6 @@ public:
         verticalLayout->addItem(verticalSpacer);
 
         gbPlayMode->raise();
-        gbLevel->raise();
         pbPlay->raise();
         groupBox->raise();
 
@@ -166,7 +142,6 @@ public:
         groupBox->setTitle(QApplication::translate("View", "Size", nullptr));
         m_lineEdit->setPlaceholderText(QApplication::translate("View", "m", nullptr));
         n_lineEdit->setPlaceholderText(QApplication::translate("View", "n", nullptr));
-        gbLevel->setTitle(QApplication::translate("View", "Level", nullptr));
         pbPlay->setText(QApplication::translate("View", "Start", nullptr));
     } // retranslateUi
 

@@ -24,7 +24,6 @@ public:
 	void setActive(bool active) { this->active = active; }
 	bool isActive() { return this->active; }
 
-	void setAILevel(int AILevel) { this->AILevel = AILevel; }
 	void setPlayMode(MonsterType gameMode) { this->gameMode = gameMode; }
 	void setArenaSize(int m, int n) { this->m = m; this->n = n; }
 	QPoint getArenaSize() { return QPoint(m, n); }
@@ -97,7 +96,6 @@ private:
 
 	bool active = false;
 	bool playersTurn;
-	int AILevel;
 	int selectedMonster;
 
 	void initialize();

@@ -78,7 +78,6 @@ void View::pbPlayClicked()
 		this->game->setArenaSize(m, n);
 		this->ui.pbPlay->setText("Restart");
 		this->game->setPlayMode(ui.rbBandit->isChecked() ? Game::MT_BANDIT : Game::MT_POLICEMAN);
-		this->game->setAILevel(ui.sbAILevel->value());
 		this->game->reset();
 	}
 }
