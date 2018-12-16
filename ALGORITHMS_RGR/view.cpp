@@ -127,7 +127,7 @@ void View::paintEvent(QPaintEvent *)
 
 	// шрифт для надписей
 	QFont font = p.font();
-	font.setPointSize(font.pointSize() * 2);
+	font.setPointSize(sq_size / 5 * 2);
 	p.setFont(font);
 
 	//draw monsters
