@@ -105,7 +105,7 @@ private:
 
 	void breath_search_bandit();
 
-	int runMinMax(MonsterType monster, int recursiveLevel, int alpha, int beta);
+	void play();
 
 	void prepareMap();
 };

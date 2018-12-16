@@ -25,8 +25,7 @@ void Game::reset()
 	this->active = true;
 	initialize();
 
-	if (this->gameMode != MT_BANDIT)
-		runMinMax((gameMode == MT_BANDIT) ? MT_POLICEMAN : MT_BANDIT, 0, -EPIC_BIG_VALUE, +EPIC_BIG_VALUE);
+	play();
 
 	this->playersTurn = true;
 }
@@ -123,7 +122,7 @@ bool Game::moveSelectedMonsterToPosition(const QPoint &pos)
 		return true;
 
 	this->playersTurn = !this->playersTurn;
-	runMinMax(this->gameMode == MT_BANDIT ? MT_POLICEMAN : MT_BANDIT, 0, -EPIC_BIG_VALUE, +EPIC_BIG_VALUE);
+	play();
 	this->playersTurn = !this->playersTurn;
 
 	isGameOver();
@@ -164,7 +163,7 @@ void Game::breath_search_bandit()
 }
 
 
-int Game::runMinMax(MonsterType monster, int recursiveLevel, int alpha, int beta)
+void Game::play()
 {
 	prepareMap();
 	// заполним карту расстояниями
@@ -178,6 +177,11 @@ int Game::runMinMax(MonsterType monster, int recursiveLevel, int alpha, int beta
 		for (int i = 0; i < 8; i++)
 		{
 			QPoint new_pos = this->policeman + this->possibleMoves[i];
+			if (new_pos == this->bandit)
+			{
+				movement_index = i;
+				break;
+			}
 			if (checkRange(new_pos) && map[new_pos.y()][new_pos.x()] < min)
 			{
 				min = map[new_pos.y()][new_pos.x()];
@@ -209,7 +213,6 @@ int Game::runMinMax(MonsterType monster, int recursiveLevel, int alpha, int beta
 		}
 		this->bandit += possibleMoves[movement_index];
 	}
-	return 0;
 }
 
 void Game::initialize()
